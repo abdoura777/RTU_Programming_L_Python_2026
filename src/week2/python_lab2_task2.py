@@ -1,43 +1,72 @@
-"""
-Task 2 – Greeting Function with String Manipulation
----------------------------------------------------
-Write a function `greet_user(name)` that:
-- removes extra spaces at the start and end with .strip()
-- capitalizes the first letter with .capitalize()
-  (note: .capitalize() also makes the REST of the string lowercase)
-- returns exactly: "Hello, <Name>! Welcome to Python!"
-- if the name is empty (or only spaces), uses "Stranger" as the name
+task 2 : """
+Lab 2.2 – Comprehensions and Transformations
+--------------------------------------------
+Practice list, set and dictionary comprehensions.
 
-In the main block: ask the user for their name and print the greeting.
+Write these functions. Each one should return a SINGLE comprehension
+(one line after return), not a for loop that appends:
+- squares(numbers)      -> list : the square of each number, same order
+- positives(numbers)    -> list : only the numbers greater than 0
+                                  (0 is NOT positive), same order
+- even_squares(numbers) -> set  : the squares of the EVEN numbers only
+                                  (0 and negative even numbers count too)
+- cubes(numbers)        -> dict : maps each number to its cube
+
+In the main block: use the list NUMBERS below, call each function and
+print the results.
 
 Example run:
-    Enter your name:   alice
-    Hello, Alice! Welcome to Python!
+    Squares: [9, 64, 4, 49, 0, 25, 100]
+    Positives: [3, 8, 7, 10]
+    Even squares: {64, 0, 4, 100}      (a set has no fixed order)
+    Cubes: {3: 27, 8: 512, -2: -8, 7: 343, 0: 0, -5: -125, 10: 1000}
 
 Examples (these are also used to check your work):
->>> greet_user("alice")
-'Hello, Alice! Welcome to Python!'
->>> greet_user("   bob  ")
-'Hello, Bob! Welcome to Python!'
->>> greet_user("anna MARIE")
-'Hello, Anna marie! Welcome to Python!'
->>> greet_user("   ")
-'Hello, Stranger! Welcome to Python!'
+>>> squares([1, -2, 3])
+[1, 4, 9]
+>>> squares(NUMBERS)
+[9, 64, 4, 49, 0, 25, 100]
+>>> positives(NUMBERS)
+[3, 8, 7, 10]
+>>> sorted(even_squares(NUMBERS))
+[0, 4, 64, 100]
+>>> type(even_squares(NUMBERS))
+<class 'set'>
+>>> cubes([2, -3])
+{2: 8, -3: -27}
+>>> squares([]), positives([]), even_squares([]), cubes([])
+([], [], set(), {})
 """
 
-
-def greet_user(name: str) -> str:
-    """Return a greeting message after cleaning and capitalizing the name."""
-    cleaned_name = name.strip()
-    if not cleaned_name:
-        cleaned_name = "Stranger"
-    else:
-        cleaned_name = cleaned_name.capitalize()
-    return f"Hello, {cleaned_name}! Welcome to Python!"
+NUMBERS = [3, 8, -2, 7, 0, -5, 10]
 
 
-if __name__ == "__main__":
-    # Keep all input() calls inside this block, otherwise the autograder
-    # cannot import your file.
-    name_input = input("Enter your name: ")
-    print(greet_user(name_input))
+def squares(numbers: list[int]) -> list[int]:
+    """Return a list with the square of each number (list comprehension)."""
+    # TODO: implement with a list comprehension
+    raise NotImplementedError("squares() is not implemented yet")
+
+
+def positives(numbers: list[int]) -> list[int]:
+    """Return only the numbers greater than 0 (list comprehension)."""
+    # TODO: implement with a list comprehension
+    raise NotImplementedError("positives() is not implemented yet")
+
+
+def even_squares(numbers: list[int]) -> set[int]:
+    """Return a set of the squares of the even numbers (set comprehension)."""
+    # TODO: implement with a set comprehension
+    raise NotImplementedError("even_squares() is not implemented yet")
+
+
+def cubes(numbers: list[int]) -> dict[int, int]:
+    """Return a dict mapping each number to its cube (dict comprehension)."""
+    # TODO: implement with a dict comprehension
+    raise NotImplementedError("cubes() is not implemented yet")
+
+
+if _name_ == "_main_":
+    # Keep all input() and print() calls inside this block, otherwise the
+    # autograder cannot import your file.
+    # TODO: call each function with NUMBERS and print the results
+    pass
