@@ -1,106 +1,96 @@
 """
-Task 4 – Text-based Arithmetic Analyzer
----------------------------------------
-Create a text-based analyzer made of small helper functions.
+Lab 2.4 – Functional Tools Practice
+-----------------------------------
+Practice map(), filter() and zip(), and compare them with comprehensions.
 
-Rules used by all functions:
-- Words are pieces of text separated by whitespace (use .split()).
-- A NUMBER is a word that is a whole integer, optionally with a leading
-  minus sign, e.g. "7", "42", "-3".
-  Punctuation at the end of a word is ignored, so "5," "10." "8!" count
-  as 5, 10 and 8. Use word.rstrip(".,!?;:") to remove it.
-  Decimals ("3.5") and mixed words ("abc123") are NOT numbers.
-- You do not need the `re` module; .split(), .rstrip() and .isdigit()
-  are enough.
+IMPORTANT: map(), filter() and zip() do not return lists. They return
+"lazy" objects (printing one shows something like <map object at 0x...>).
+Wrap the result in list(...) before returning it.
 
-Helper functions:
-- count_characters(text) -> int    : characters that are not whitespace
-- count_words(text)      -> int    : number of words
-- extract_numbers(text)  -> list   : list of ints, in the order they appear
-- analyze_text(text)     -> dict   : combines the helpers (see below)
+Part A – functional style (use the tool named for each function):
+- item_totals(prices, quantities)   -> list
+    Use map() with a lambda to compute price * quantity for each item.
+    Hint: map() can take two lists: map(lambda p, q: ..., prices, quantities)
+- filter_above(totals, threshold=30) -> list
+    Use filter() with a lambda to keep only totals GREATER than threshold.
+- pair_up(prices, quantities)        -> list of tuples
+    Use zip() to pair each price with its quantity.
 
-analyze_text() returns a dict with exactly these keys:
-    "characters" : int   (from count_characters)
-    "words"      : int   (from count_words)
-    "numbers"    : list  (from extract_numbers)
-    "sum"        : int   (sum of the numbers, 0 if there are none)
-    "average"    : float (average of the numbers, 0.0 if there are none,
-                          NOT rounded)
+Part B – the same with list comprehensions:
+- item_totals_comp(prices, quantities)    -> list
+    Same result as item_totals(). Hint: [... for p, q in zip(prices, quantities)]
+- filter_above_comp(totals, threshold=30) -> list
+    Same result as filter_above().
 
-In the main block: read a line of text, call analyze_text(), and print a
-summary. Round the average to 2 decimals when printing.
+All functions keep the original order of the items.
+
+In the main block: use PRICES and QUANTITIES below, call every function
+and print the results. Which style do you find easier to read?
 
 Example run:
-    Enter text: I have 3 apples and 5 pears
-    Characters (no spaces): 21
-    Words: 7
-    Numbers: [3, 5]
-    Sum: 8
-    Average: 4.00
+    Totals: [25.0, 49.5, 15.0, 66.9, 20.0]
+    Totals > 30: [49.5, 66.9]
+    Price-quantity pairs: [(12.5, 2), (9.9, 5), (15.0, 1), (22.3, 3), (5.0, 4)]
+    Totals (comprehension): [25.0, 49.5, 15.0, 66.9, 20.0]
+    Totals > 30 (comprehension): [49.5, 66.9]
 
 Examples (these are also used to check your work):
->>> count_characters("a b  c")
-3
->>> count_words("I have 3 apples and 5 pears")
-7
->>> extract_numbers("Scores: 10, -4 and 7! but not 3.5 or abc123")
-[10, -4, 7]
->>> result = analyze_text("I have 3 apples and 5 pears")
->>> result["characters"], result["words"], result["numbers"]
-(21, 7, [3, 5])
->>> result["sum"], result["average"]
-(8, 4.0)
->>> analyze_text("no numbers here")["average"]
-0.0
+>>> item_totals(PRICES, QUANTITIES)
+[25.0, 49.5, 15.0, 66.9, 20.0]
+>>> filter_above([25.0, 49.5, 15.0, 66.9, 20.0])
+[49.5, 66.9]
+>>> filter_above([5, 10, 15], threshold=8)
+[10, 15]
+>>> pair_up([1.5, 2.0], [3, 4])
+[(1.5, 3), (2.0, 4)]
+>>> item_totals_comp(PRICES, QUANTITIES) == item_totals(PRICES, QUANTITIES)
+True
+>>> filter_above_comp([5, 10, 15], threshold=8)
+[10, 15]
+>>> type(item_totals(PRICES, QUANTITIES))
+<class 'list'>
 """
 
-
-def count_characters(text: str) -> int:
-    """Count characters that are not whitespace."""
-    return sum(1 for char in text if not char.isspace())
+PRICES = [12.5, 9.9, 15.0, 22.3, 5.0]
+QUANTITIES = [2, 5, 1, 3, 4]
 
 
-def count_words(text: str) -> int:
-    """Count number of whitespace-separated words."""
-    return len(text.split())
+# ---------- Part A: functional style ----------
+
+def item_totals(prices: list[float], quantities: list[int]) -> list[float]:
+    """Return price * quantity for each item, using map() and a lambda."""
+    # TODO: implement with map()
+    raise NotImplementedError("item_totals() is not implemented yet")
 
 
-def extract_numbers(text: str) -> list[int]:
-    """Return a list of the integers found in text, in order."""
-    numbers = []
-    for word in text.split():
-        cleaned = word.rstrip(".,!?;:")
-        # Check if it's a positive digit or negative digit
-        if cleaned.isdigit() or (cleaned.startswith("-") and cleaned[1:].isdigit()):
-            numbers.append(int(cleaned))
-    return numbers
+def filter_above(totals: list[float], threshold: float = 30) -> list[float]:
+    """Return totals greater than threshold, using filter() and a lambda."""
+    # TODO: implement with filter()
+    raise NotImplementedError("filter_above() is not implemented yet")
 
 
-def analyze_text(text: str) -> dict:
-    """Return a dict with characters, words, numbers, sum and average."""
-    chars = count_characters(text)
-    words = count_words(text)
-    nums = extract_numbers(text)
-
-    total_sum = sum(nums) if nums else 0
-    average = total_sum / len(nums) if nums else 0.0
-
-    return {
-        "characters": chars,
-        "words": words,
-        "numbers": nums,
-        "sum": total_sum,
-        "average": average,
-    }
+def pair_up(prices: list[float], quantities: list[int]) -> list[tuple]:
+    """Return a list of (price, quantity) tuples, using zip()."""
+    # TODO: implement with zip()
+    raise NotImplementedError("pair_up() is not implemented yet")
 
 
-if __name__ == "__main__":
-    # Keep all input() calls inside this block, otherwise the autograder
-    # cannot import your file.
-    text_input = input("Enter text: ")
-    result = analyze_text(text_input)
-    print(f"Characters (no spaces): {result['characters']}")
-    print(f"Words: {result['words']}")
-    print(f"Numbers: {result['numbers']}")
-    print(f"Sum: {result['sum']}")
-    print(f"Average: {result['average']:.2f}")
+# ---------- Part B: list comprehensions ----------
+
+def item_totals_comp(prices: list[float], quantities: list[int]) -> list[float]:
+    """Same as item_totals(), but with a list comprehension."""
+    # TODO: implement with a list comprehension
+    raise NotImplementedError("item_totals_comp() is not implemented yet")
+
+
+def filter_above_comp(totals: list[float], threshold: float = 30) -> list[float]:
+    """Same as filter_above(), but with a list comprehension."""
+    # TODO: implement with a list comprehension
+    raise NotImplementedError("filter_above_comp() is not implemented yet")
+
+
+if _name_ == "_main_":
+    # Keep all input() and print() calls inside this block, otherwise the
+    # autograder cannot import your file.
+    # TODO: call every function with PRICES and QUANTITIES and print results
+    pass
