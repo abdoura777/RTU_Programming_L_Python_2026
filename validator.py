@@ -24,11 +24,6 @@ def load_airports(path: str) -> set[str]:
 def _valid_dt(val: str) -> bool:
     if len(val) != 16 or val[10] != " ":
         return False
-    for i in range(16):
-        if i == 10:
-            continue
-        if not ("0" <= val[i] <= "9"):
-            return False
     try:
         datetime.strptime(val, "%Y-%m-%d %H:%M")
         return True

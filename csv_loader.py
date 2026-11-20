@@ -7,46 +7,41 @@ from validator import to_record, validate_row
 
 
 def parse_files(paths: list[str], airports: set[str]) -> tuple[list[dict], list[str]]:
-    """Process the CSV files in the order given.
-
-    Return (records, errors):
-      records - valid flight records, in input order
-      errors  - one message per invalid row, in input order, formatted as
-                "<file name>:<line number>: <ERROR_CODE> | <free text>"
-                (base file name only, no timestamp or level, no newline)
-
-    Also performs the DUPLICATE_FLIGHT check across all the files.
-    Does not write any files and does not log anything itself.
-    """
-    records = []
-    errors = []
-    seen_ids = set()
+    """Process the CSV files in the order given."""
+    records: list[dict] = []
+    errors: list[str] = []
+    seen_flights: set[tuple[str, str]] = set()
 
     for path in paths:
         fname = os.path.basename(path)
         with open(path, "r", encoding="utf-8", newline="") as f:
             reader = csv.reader(f)
             for line_no, row in enumerate(reader, start=1):
-                if not row:
+                if not row or all(cell.strip() == "" for cell in row):
                     continue
 
-                if line_no == 1:
-                    first_col = row[0].strip().lower()
-                    if first_col in ("flight_id", "id"):
-                        continue
+                first = row[0].strip()
+                if first.startswith("#"):
+                    continue
+
+                if line_no == 1 and first.lower() in ("flight_id", "id"):
+                    continue
 
                 err = validate_row(row, airports)
                 if err is not None:
-                    errors.append(f"{fname}:{line_no}: {err} | invalid flight row")
+                    errors.append(f"{fname}:{line_no}: {err} | invalid row")
                     continue
 
                 rec = to_record(row)
-                fid = rec["flight_id"]
-                if fid in seen_ids:
-                    errors.append(f"{fname}:{line_no}: DUPLICATE_FLIGHT | duplicate flight_id {fid}")
+                dep_date = rec["departure_datetime"][:10]
+                key = (rec["flight_id"], dep_date)
+                if key in seen_flights:
+                    errors.append(
+                        f"{fname}:{line_no}: DUPLICATE_FLIGHT | duplicate flight {rec['flight_id']} on {dep_date}"
+                    )
                     continue
 
-                seen_ids.add(fid)
+                seen_flights.add(key)
                 records.append(rec)
 
     return records, errors
