@@ -63,13 +63,21 @@ def _matches_query(rec: dict, q: dict) -> bool:
             return False
         elif key == "min_price" and rec.get("price", 0) < val:
             return False
-        elif key == "departure_after" and not _matches_dt_bound(rec["departure_datetime"], val, "after"):
+        elif key == "departure_after" and not _matches_dt_bound(
+            rec["departure_datetime"], val, "after"
+        ):
             return False
-        elif key == "departure_before" and not _matches_dt_bound(rec["departure_datetime"], val, "before"):
+        elif key == "departure_before" and not _matches_dt_bound(
+            rec["departure_datetime"], val, "before"
+        ):
             return False
-        elif key == "departure_datetime" and not _matches_dt_bound(rec["departure_datetime"], val, "after"):
+        elif key == "departure_datetime" and not _matches_dt_bound(
+            rec["departure_datetime"], val, "after"
+        ):
             return False
-        elif key == "arrival_datetime" and not _matches_dt_bound(rec["arrival_datetime"], val, "before"):
+        elif key == "arrival_datetime" and not _matches_dt_bound(
+            rec["arrival_datetime"], val, "before"
+        ):
             return False
     return True
 
@@ -102,7 +110,11 @@ def run_query(db: list[dict], query: dict) -> dict:
         return {"query": query, "error": "INVALID_QUERY", "matches": []}
 
     for str_key in ("flight_id", "origin", "destination"):
-        if str_key in query and query[str_key] is not None and not isinstance(query[str_key], str):
+        if (
+            str_key in query
+            and query[str_key] is not None
+            and not isinstance(query[str_key], str)
+        ):
             return {"query": query, "error": "INVALID_QUERY", "matches": []}
 
     for num_key in ("price", "max_price", "min_price"):
@@ -148,7 +160,9 @@ def run_query(db: list[dict], query: dict) -> dict:
 
     if sort_by is not None:
         reverse = order == "desc"
-        matches.sort(key=lambda r: r.get(sort_by), reverse=reverse) # pyright: ignore[reportArgumentType]
+        matches.sort(
+            key=lambda r: r.get(sort_by), reverse=reverse  # type: ignore
+        )  # pyright: ignore[reportArgumentType]
 
     if limit is not None:
         matches = matches[:limit]
