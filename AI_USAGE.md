@@ -6,7 +6,11 @@
 
 ## Conversation links
 
+<<<<<<< HEAD
 - Link 1:[https://chatgpt.com/c/6affa49c-2368-83eb-b55a-bfba2c20eb41](https://chatgpt.com/share/6b05ef97-9054-83ed-a84b-0f0feb975a44)
+=======
+- Link 1:https://chatgpt.com/share/6b05ef97-9054-83ed-a84b-0f0feb975a44
+>>>>>>> ff7401b (Final lab update)
 - Link 2:
 
 ## What I used them for
